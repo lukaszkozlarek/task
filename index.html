@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Zadanie</title>
+</head>
+
+<body class="py-3 bg-light">
+    <div class="container p-3 bg-white">
+        <h1 class="text-left pb-1">Latest Posts</h1>
+        <div id="result">
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+
+    <script>
+        fetch('https://tedee.com/wp-json/wp/v2/posts?lang=pl&orderby=date&per_page=4&_embed').then(function (response) {
+            return response.json()
+        }).then(function (posts) {
+            posts.forEach(post => {
+                let date = new Date(post.date);
+
+                let new_date = date.toLocaleDateString();
+                let new_time = date.toLocaleTimeString();
+
+                let formattedDate = new_date + " " + new_time;
+
+                $('#result').append(`
+                <div class="container p-3 border-top">
+                    <a href="${post.link}" target="_blank" class="text-decoration-none">
+                        <h5>${post.title.rendered}</h5>
+                    </a>
+                    <span class="text-dark">by 
+                        <span class="text-primary font-italic">${post._embedded.author[0].name}</span>
+                    </span>
+                    <span  class="text-dark"> | </span>
+                    <span class="text-dark"> ${formattedDate}</span>
+                    
+                </div>
+                `)
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
